@@ -14,9 +14,16 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LiveCharts.WinForms;
+//using LiveChartsCore;
+//using LiveChartsCore.SkiaSharpView;
+
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Reflection;
+using System.Linq.Expressions;
+using System.Diagnostics.Eventing.Reader;
+using Newtonsoft.Json.Linq;
+using System.Windows.Documents;
+using LiveChartsCore;
 //using System.Windows.Controls;
 
 
@@ -45,6 +52,8 @@ namespace mcl
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        
+
         public Form1()
         {
             InitializeComponent();
@@ -132,6 +141,8 @@ namespace mcl
 
             // Load the list of boreholes
             ReloadList();
+
+            
         }
 
         private void FrmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -254,8 +265,8 @@ namespace mcl
 
                                 //unit = row[4].Trim();// ADD EXCEPTION FOR NULL VALUES HERE
                                 //unit = row[4]?.Trim() ?? "NA";
-                                unit = (row.Length > 4 ? row[4]?.Trim() : null) ?? "NO INPUT";
-
+                                //unit = (row.Length > 4 ? row[4]?.Trim() : null) ?? "NO INPUT";
+                                unit = (row.Length >= 4 ? row[4]?.Trim() : "NO INPUT");
 
 
                                 // Add channel number to the list if it's not already present
@@ -312,12 +323,15 @@ namespace mcl
                                     // Extract only the date part from the "DATE   TIME" value
                                     string date = dateTimeValue.Split()[0]; // Split by space and take the first part as the date
 
+                                    string formattedDate = date.Replace("/", "-");
+
                                     // Check if the sub-file for the current date already exists for the current channel
-                                    string subFileName = Path.Combine(channelDirName, $"Channel_{channelNumber}_{date}.csv");
+                                    string subFileName = Path.Combine(channelDirName, $"Channel_{channelNumber}_{formattedDate}.csv");
+
                                     if (!File.Exists(subFileName) && !existingDates.Contains(date))
                                     {
                                         // Write the channel data for the current date to the sub-file
-                                        using (StreamWriter writer = new StreamWriter(subFileName))
+                                        using (StreamWriter writer = new StreamWriter(subFileName)) //
                                         {
                                             // Write header row
                                             writer.WriteLine(string.Join(",", strData[0]));
@@ -516,6 +530,7 @@ namespace mcl
             // Create columns in the DataTable to hold the report data
             DataTable ds = new DataTable();
             //ds.Columns.Add("DateTime", typeof(LocalDateTime)); // Add a LocalDateTime column
+            ds.Columns.Add("Sr.No", typeof(int));
             ds.Columns.Add("DateTime", typeof(string)); // Add a LocalDateTime column
             //ds.Columns.Add("Sensor", typeof(int));
             //ds.Columns.Add("Depth", typeof(float));
@@ -528,14 +543,16 @@ namespace mcl
 
             
             var loopTo = (short)(strData.Length - 1);
-            
+
+            int srNo = 1;
+
             for (int index = 0; index <= loopTo; index++)
             {
-                if (strData[index].Length < 5)
-                {
-                    Console.WriteLine($"Error at row {index + 1}: Insufficient data columns");
-                    continue;
-                }
+                //if (strData[index].Length < 5)
+                //{
+                //    Console.WriteLine($"Error at row {index + 1}: Insufficient data columns");
+                //    continue;
+                //}
 
                 try
                 {
@@ -565,7 +582,11 @@ namespace mcl
                     //pattern2.Parse(strData[index][0]).TryGetValue(default(LocalDateTime), out dateTimeValue) ||
                     //if (pattern3.Parse(strData[index][0]).TryGetValue(default(LocalDateTime), out dateTimeValue))
                     //DateTime parsedDateTime = DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
+                    
+                    
+                    if (!(strData[index].Length<4))
                     {
+                        
                         var datetimeStr = strData[index][0];
                         int intValue = int.Parse(strData[index][1]);
                         float floatValue = float.Parse(strData[index][3]);
@@ -573,12 +594,16 @@ namespace mcl
 
                         // Add the row to the DataTable
                         //ds.Rows.Add(new object[] { dateTimeValue, intValue1, intValue2, floatValue1, floatValue2 });
-                        ds.Rows.Add(new object[] { datetimeStr, intValue, floatValue, unitValue });
+                        ds.Rows.Add(new object[] { srNo++, datetimeStr, intValue, floatValue, unitValue });
                     }
-            
-            {
-                Console.WriteLine($"Error parsing date at row {index + 1}: {strData[index][0]}");
-            }
+                    else
+                    {
+                        var datetimeStr = strData[index][0];
+                        int intValue = int.Parse(strData[index][1]);
+                        float floatValue = 0;
+                        var unitValue = "NO INPUT";
+                        ds.Rows.Add(new object[] { srNo++, datetimeStr, intValue, floatValue, unitValue });
+                    }
         }
                 catch (Exception ex)
                 {
@@ -770,16 +795,16 @@ namespace mcl
 
                 Title = "Values",
 
-                MaxValue = 5d,
-                MinValue = -5d,
+                //MaxValue = 5d,
+                //MinValue = -5d,
                 // Configure a separator for the Y-axis
                 Separator = new Separator()
                 {
                     // Enable the separator
                     IsEnabled = true,
                     // Set the stroke thickness (line thickness) for the separator
-                    Step = 1.0d,
-                    StrokeThickness = 1d
+                    Step = 5.0d,
+                    StrokeThickness = 1.5d
                 },
 
                 Sections = axisSectionSeries // Add axis sections
@@ -792,13 +817,19 @@ namespace mcl
                 Title = "DateTime",
                 //LabelFormatter = new Func<double, string>(y => Math.Round(y, 2).ToString()),
 
-                LabelFormatter = value => DateTime.FromOADate(value).ToString(), // Convert OLE Automation Date back to DateTime
+                //LabelFormatter = value => DateTime.FromOADate(value).ToString(), // Convert OLE Automation Date back to DateTime
+                //LabelFormatter = value => new DateTime((long)value).ToString("dd-MM-yyyy"),
+                //MinValue = DateTime.Now.AddDays(-30).ToOADate(),  // Adjust as needed
+                //MaxValue = DateTime.Now.ToOADate(),
+                
 
-                Separator = new Separator()
+            Separator = new Separator()
                 {
                     IsEnabled = true,
-                    Step = 0.5d,
-                    StrokeThickness = 1d
+                    Step = 1d,
+
+                    //Step = TimeSpan.FromDays(7).TotalDays,  // One week interval
+                    StrokeThickness = 1.5d
                 },
 
             };
@@ -832,73 +863,196 @@ namespace mcl
                 //tbZoom.Enabled = true;
                 tbAxisX.Enabled = false;
 
+            // Create a list to store the dates that are present in the data
+            List<DateTime> selectedDates = new List<DateTime>();
+            int dateTimeIndex=0;
+            string[][] strData = null;
+            int valueIndex = 0;
+            string strFile = null;
+            List<string> selectedlstItems= new List<string>();
+
             foreach (string lstItem in lstBoreholes.SelectedItems)
             {
-                Console.WriteLine("Inside foreach loop");
-                // Get the path to the current file
                 string argFileName = GlobalCode.GetBoreholeDirectory(ref boreHoleSelected) + @"\" + lstItem;
-                string[][] strData = GlobalCode.ReadCSVFile(ref argFileName);
-                string strFile = lstItem.Split('.').First().Replace("_", ":");
+                strData = GlobalCode.ReadCSVFile(ref argFileName);
+                strFile = lstItem.Split('.').First().Replace("_", ":");
+
+                selectedlstItems.Add(lstItem);
+
                 //--------------------------
-
                 // Find the indices of "DATE TIME" and "VALUE" columns
-                int dateTimeIndex = Array.IndexOf(strData[0], "DATE   TIME");
-                int valueIndex = Array.IndexOf(strData[0], "VALUE");
+                dateTimeIndex = Array.IndexOf(strData[0], "DATE   TIME");
+                valueIndex = Array.IndexOf(strData[0], "VALUE");
 
 
-                // Populate line series with data points
-                for (int i = 1; i < strData.Length; i++)
-                {
-                    // Parse the "DATE TIME" and "VALUE" from the row
-                    string[] rowData = strData[i];
-                    string dateTimeString = rowData[dateTimeIndex];
-                    string valueString = rowData[valueIndex];
+                //var series = new ColumnSeries();
+                double value = 0;//original
+                                 //double roundedValue = Math.Round(value, 2);
 
-                    // Parse date time and value (assuming value is numeric)
-                    DateTime dateTime;
-                    double value;
-
-                    if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value))
+                
+                    var series = new ColumnSeries
                     {
-                        // Determine the color based on the value's sign
-                        System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
+                        Title = "value",
+                        Values = new ChartValues<ObservablePoint>(),
+                        Fill = System.Windows.Media.Brushes.LightGreen,
+                        Stroke = System.Windows.Media.Brushes.DarkGreen,
+                        PointGeometry = DefaultGeometries.Square,
+                        StrokeThickness = 1.0
+                    };
+                    series.DataLabels = true;
+                    series.FontSize = 8;
 
-                        // Create a new line series for the chart
-                        var series = new ColumnSeries()
+                    // Populate line series with data points
+                    for (int i = 1; i < strData.Length; i++)
+                    {
+                        // Parse the "DATE TIME" and "VALUE" from the row
+                        string[] rowData = strData[i];
+                        string dateTimeString = rowData[dateTimeIndex];
+
+                        if (dateTimeString.Contains('/'))
                         {
-                            //Title = "[" + strFile + "]",
-                            Title = "value",
-                            Values = new ChartValues<ObservablePoint>(),
-                            //Fill = System.Windows.Media.Brushes.Transparent,
-                            //Fill = System.Windows.Media.Brushes.LightBlue,
-                            Fill = color,
-                            PointGeometry = DefaultGeometries.Square,
-                            //Stroke = System.Windows.Media.Brushes.Blue, // Change the line color to blue
-                            StrokeThickness = 1.0 // Adjust the line thickness
-                        };
+                            // Replace '/' with '-'
+                            dateTimeString = dateTimeString.Replace('/', '-');
+                        }
+                        Console.WriteLine(dateTimeString);
 
-                        // Add the data point to the series
-                        //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), value));
-                        series.Values.Add(new ObservablePoint(dateTime.ToOADate(), value));
+                        string valueString;
 
-                        seriesCollection.Add(series);
+                        if (rowData.Length < 4)
+                        {
+                            valueString = "0";
+                        }
+                        else
+                        {
+                            valueString = rowData[valueIndex];
+                        }
 
+
+                        DateTime dateTime;//original 
+
+
+                        string[] formats = { "M-dd-yyyy HH:mm" }; //inbuilt dateTime library
+
+
+                        if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
+                        {
+                            if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
+                                                                                                                            //if (DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime) && double.TryParse(valueString, out value))//inbuilt dateTime library                                                                                              //if ((pattern1.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime) || pattern2.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime)) && double.TryParse(valueString, out value))
+                            {
+                                System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
+                                System.Windows.Media.Brush borderColor = value >= 0 ? System.Windows.Media.Brushes.DarkGreen : System.Windows.Media.Brushes.DarkRed;
+
+                                // Add the date to the list of available dates
+                                selectedDates.Add(dateTime); //dateline
+
+                                double roundedValue = Math.Round(value, 2);
+
+                                series.Values.Add(new ObservablePoint(selectedDates.Count - 1, roundedValue));
+
+
+
+                                //series.Foreground = System.Windows.Media.Brushes.Red;
+
+                                //series.LabelPoint = chartPoint =>
+                                // DateTime.FromOADate(chartPoint.X).ToString("MMM dd HH:mm") + ", " + Math.Round(chartPoint.Y, 2);
+
+
+                                //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), roundedValue)); //original working
+
+                                //series.Values.Add(new ObservablePoint(dateTime.ToDateTimeUnspecified().ToOADate(), value));//nodaTime library
+                                //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), value));
+
+                                //-------------
+                                //for (int k = 0; k < selectedDates.Count; k++)//dateline
+                                //{
+                                //    series.Values.Add(new ObservablePoint(k, roundedValue));
+                                //}
+                                //series.Values.Add(new ObservablePoint(selectedDates.Count, roundedValue));
+
+                                //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
+                                //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToString();
+
+                                //seriesCollection.Add(series);
+
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Error parsing data at row {i}");
+                            }
+
+                            Console.WriteLine(seriesCollection);
+                            // Set the series collection for the chart
+                            CartesianChart1.Series = seriesCollection;
+                        }
                     }
-                    else
+
+                    //for (int k = 0; k < selectedDates.Count; k++)//dateline
+                    //{
+                    //    series.Values.Add(new ObservablePoint(k, roundedValue));
+                    //}
+                    //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
+                    seriesCollection.Add(series);
+
+                    // Set labels
+                    switch (cnt)
                     {
-                        // Handle parsing errors if necessary
-                        Console.WriteLine($"Error parsing data at row {i}");
+                        case 0:
+                            {
+                                Label1.Text = strFile;
+                                break;
+                            }
+                        case 1:
+                            {
+                                Label2.Text = strFile;
+                                break;
+                            }
+                        case 2:
+                            {
+                                Label3.Text = strFile;
+                                break;
+                            }
+                        case 3:
+                            {
+                                Label4.Text = strFile;
+                                break;
+                            }
+                        case 4:
+                            {
+                                Label5.Text = strFile;
+                                break;
+                            }
+                        case 5:
+                            {
+                                label7.Text = strFile;
+                                break;
+                            }
+                        case 6:
+                            {
+                                label8.Text = strFile;
+                                break;
+                            }
+
                     }
-                }
-
-
-                // Set labels
-
-                Console.WriteLine(seriesCollection);
-                // Set the series collection for the chart
-                CartesianChart1.Series = seriesCollection;
+                    cnt = (short)(cnt + 1);
+                
 
             }
+            CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToString();
+
+            Console.WriteLine(seriesCollection);
+            // Set the series collection for the chart
+            CartesianChart1.Series = seriesCollection;
+
+            //if (System.IO.File.Exists(strFileBase))
+            //{
+            //    Label6.Text = "Base File : " + listBH[bhIndex].BaseFile.Split('.').First().Replace("_", ":");
+            //}
+            //else
+            //{
+            //    Label6.Text = "";
+            //}
+
+
         }
 
 
@@ -983,10 +1137,11 @@ namespace mcl
                 //lblDepth.Text = "Depth : " + listBH[bhIndex].Depth + "m";
                 //lblSiteName.Text = "Site : " + listBH[bhIndex].SiteName;
                 //lblLocation.Text = "Location : " + listBH[bhIndex].Location;
-                lblLocation.Text = "Channel  : " + listBH[bhIndex].ChNo;
-                lblLocation.Text = "Unit  : " + listBH[bhIndex].Unit;
-                lblLocation.Text = "Unit  : " + listBH[bhIndex].Unit;
 
+                //lblLocation.Text = "Channel  : " + listBH[bhIndex].ChNo;
+                lblLocation.Text = "Channel  : " + listBH[bhIndex].Id;
+                lblLocation.Text = "Unit  : " + listBH[bhIndex].Unit;
+                
             }
             else
             {
@@ -1006,7 +1161,7 @@ namespace mcl
                 tbViewGraph.Enabled = true;
                 tbDelete.Enabled = true;
                 tbReport.Enabled = bnOneFileSelected;
-                tbBaseFile.Enabled = bnOneFileSelected;
+                //tbBaseFile.Enabled = bnOneFileSelected;
             }
             else
             {
@@ -1337,6 +1492,13 @@ namespace mcl
         }
 
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        
+
+        private void tbMenuSlider_Click_1(object sender, EventArgs e)
         {
 
         }
