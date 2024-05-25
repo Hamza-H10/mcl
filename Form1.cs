@@ -52,7 +52,7 @@ namespace mcl
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        
+
 
         public Form1()
         {
@@ -60,9 +60,11 @@ namespace mcl
             this.AutoScaleMode = AutoScaleMode.Dpi;//for scalability issues in different DPI, windows 10,11 
         }
 
-        //  s the list of boreholes in the user interface
+
+
         private void ReloadList()
         {
+
             Console.WriteLine("Inside ReloadList function");
             // Clear the list of boreholes
             lstBoreholes.Items.Clear();
@@ -77,7 +79,7 @@ namespace mcl
                 foreach (var bitem in listBH)
                     //lstBoreholes.Items.Add("[" + bitem.Id.ToString("D2") + "] " + bitem.SiteName + " - " + bitem.Location);
                     //lstBoreholes.Items.Add("[" + bitem.Id.ToString("D2") + "] " + bitem.ChNo + " - " + bitem.Unit);
-                    lstBoreholes.Items.Add("channel " + bitem.Id.ToString("D2") + bitem.Unit);
+                    lstBoreholes.Items.Add("Ch " + bitem.Id.ToString("D2") + " "+bitem.Unit);
 
                 // Configure list box selection mode and toolbar
                 lstBoreholes.SelectionMode = SelectionMode.One;
@@ -121,6 +123,8 @@ namespace mcl
 
             // Reset other properties and states as needed...
 
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -142,7 +146,7 @@ namespace mcl
             // Load the list of boreholes
             ReloadList();
 
-            
+
         }
 
         private void FrmMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -187,7 +191,7 @@ namespace mcl
                             continue; // Skip processing this file if it doesn't meet the minimum row requirement
                         }
 
-
+                         
                         // Catch 4 parameters for the new borehole
                         // Parse the borehole number, directory name, and depth from the CSV data
                         //short borehole_num;
@@ -326,7 +330,8 @@ namespace mcl
                                     string formattedDate = date.Replace("/", "-");
 
                                     // Check if the sub-file for the current date already exists for the current channel
-                                    string subFileName = Path.Combine(channelDirName, $"Channel_{channelNumber}_{formattedDate}.csv");
+                                    //string subFileName = Path.Combine(channelDirName, $"Channel_{channelNumber}_{formattedDate}.csv");
+                                    string subFileName = Path.Combine(channelDirName, $"{formattedDate}.csv");
 
                                     if (!File.Exists(subFileName) && !existingDates.Contains(date))
                                     {
@@ -433,7 +438,7 @@ namespace mcl
 
         private void SplitCSVDataIntoSubFiles(string[][] strData, string strDirName)
         {
-            
+
         }
 
         private void tbBack_Click(object sender, EventArgs e)
@@ -524,7 +529,7 @@ namespace mcl
             LocalDateTimePattern pattern1 = LocalDateTimePattern.CreateWithInvariantCulture("dd/MM/yyyy HH:mm");
             LocalDateTimePattern pattern2 = LocalDateTimePattern.CreateWithInvariantCulture("dd-MM-yyyy HH:mm");
             LocalDateTimePattern pattern3 = LocalDateTimePattern.CreateWithInvariantCulture("dd-MMM-yy HH:mm");//also tried "dd-MMM-yy HH:mm"
-            
+
             string format = "dd-MMM-yy HH:mm"; // Custom format for "12-APR-24 12:7:54"
 
             // Create columns in the DataTable to hold the report data
@@ -541,7 +546,7 @@ namespace mcl
             ds.Columns.Add("Value", typeof(float));
             ds.Columns.Add("Unit", typeof(string));
 
-            
+
             var loopTo = (short)(strData.Length - 1);
 
             int srNo = 1;
@@ -556,19 +561,19 @@ namespace mcl
 
                 try
                 {
-                    
+
                     Console.WriteLine("Current Row:\n" + string.Join("\n", index));
 
                     string dateTimeString = strData[index][0];
 
                     Console.WriteLine($"Processing row {index + 1}: {dateTimeString}");
 
-                    
+
                     //if (row[0] == "DATE" && row[1] == "TIME")
                     if (strData[index][0] == "DATE   TIME")
                         continue;
 
-                    
+
                     LocalDateTime dateTimeValue;
                     //LocalDateTime parsedDateTime;
                     //IPattern<LocalDate> datePattern = NodaTime.Patterns.CreateLocalDatePattern("dd-MMM-yy"); // Pattern for date part
@@ -582,11 +587,11 @@ namespace mcl
                     //pattern2.Parse(strData[index][0]).TryGetValue(default(LocalDateTime), out dateTimeValue) ||
                     //if (pattern3.Parse(strData[index][0]).TryGetValue(default(LocalDateTime), out dateTimeValue))
                     //DateTime parsedDateTime = DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
-                    
-                    
-                    if (!(strData[index].Length<4))
+
+
+                    if (!(strData[index].Length < 4))
                     {
-                        
+
                         var datetimeStr = strData[index][0];
                         int intValue = int.Parse(strData[index][1]);
                         float floatValue = float.Parse(strData[index][3]);
@@ -604,7 +609,7 @@ namespace mcl
                         var unitValue = "NO INPUT";
                         ds.Rows.Add(new object[] { srNo++, datetimeStr, intValue, floatValue, unitValue });
                     }
-        }
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error at row {index + 1}: {ex.Message}");
@@ -742,7 +747,7 @@ namespace mcl
                 DataGridView1.BackgroundColor = Color.WhiteSmoke;
 
                 // Change the background color of selected cells
-                DataGridView1.DefaultCellStyle.SelectionBackColor = Color.LightCoral;
+                DataGridView1.DefaultCellStyle.SelectionBackColor = Color.DarkOrange;
                 DataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
 
 
@@ -758,7 +763,7 @@ namespace mcl
                 //tbGraphType.Enabled = false;
             }
         }
-        //----------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------------------------
         private void DisplayGraph_Channel()
@@ -818,12 +823,12 @@ namespace mcl
                 //LabelFormatter = new Func<double, string>(y => Math.Round(y, 2).ToString()),
 
                 //LabelFormatter = value => DateTime.FromOADate(value).ToString(), // Convert OLE Automation Date back to DateTime
-                //LabelFormatter = value => new DateTime((long)value).ToString("dd-MM-yyyy"),
+                LabelFormatter = value => new DateTime((long)value).ToString("dd-MM-yyyy"),
                 //MinValue = DateTime.Now.AddDays(-30).ToOADate(),  // Adjust as needed
                 //MaxValue = DateTime.Now.ToOADate(),
-                
 
-            Separator = new Separator()
+
+                Separator = new Separator()
                 {
                     IsEnabled = true,
                     Step = 1d,
@@ -842,6 +847,7 @@ namespace mcl
 
             CartesianChart1.BackColor = System.Drawing.Color.White;
             CartesianChart1.Zoom = ZoomingOptions.Xy;
+            //CartesianChart1.Zoom = ZoomingOptions.Y;
             CartesianChart1.Series.Clear();
             CartesianChart1.AxisX.Clear();
             CartesianChart1.AxisY.Clear();
@@ -865,11 +871,11 @@ namespace mcl
 
             // Create a list to store the dates that are present in the data
             List<DateTime> selectedDates = new List<DateTime>();
-            int dateTimeIndex=0;
+            int dateTimeIndex = 0;
             string[][] strData = null;
             int valueIndex = 0;
             string strFile = null;
-            List<string> selectedlstItems= new List<string>();
+            List<string> selectedlstItems = new List<string>();
 
             foreach (string lstItem in lstBoreholes.SelectedItems)
             {
@@ -889,155 +895,165 @@ namespace mcl
                 double value = 0;//original
                                  //double roundedValue = Math.Round(value, 2);
 
-                
-                    var series = new ColumnSeries
+
+                var series = new ColumnSeries
+                {
+                    Title = "value",
+                    Values = new ChartValues<ObservablePoint>(),
+                    Fill = System.Windows.Media.Brushes.LightGreen,
+                    Stroke = System.Windows.Media.Brushes.DarkGreen,
+                    PointGeometry = DefaultGeometries.Square,
+                    StrokeThickness = 1.0
+                };
+                series.DataLabels = true;
+                series.FontSize = 8;
+
+                // Populate line series with data points
+                for (int i = 1; i < strData.Length; i++)
+                {
+                    // Parse the "DATE TIME" and "VALUE" from the row
+                    string[] rowData = strData[i];
+                    string dateTimeString = rowData[dateTimeIndex];
+
+                    if (dateTimeString.Contains('/'))
                     {
-                        Title = "value",
-                        Values = new ChartValues<ObservablePoint>(),
-                        Fill = System.Windows.Media.Brushes.LightGreen,
-                        Stroke = System.Windows.Media.Brushes.DarkGreen,
-                        PointGeometry = DefaultGeometries.Square,
-                        StrokeThickness = 1.0
-                    };
-                    series.DataLabels = true;
-                    series.FontSize = 8;
+                        // Replace '/' with '-'
+                        dateTimeString = dateTimeString.Replace('/', '-');
+                    }
+                    Console.WriteLine(dateTimeString);
 
-                    // Populate line series with data points
-                    for (int i = 1; i < strData.Length; i++)
+                    string valueString;
+
+                    if (rowData.Length < 4)
                     {
-                        // Parse the "DATE TIME" and "VALUE" from the row
-                        string[] rowData = strData[i];
-                        string dateTimeString = rowData[dateTimeIndex];
+                        valueString = "0";
+                    }
+                    else
+                    {
+                        valueString = rowData[valueIndex];
+                    }
 
-                        if (dateTimeString.Contains('/'))
+
+                    DateTime dateTime;//original 
+
+
+                    string[] formats = { "M-dd-yyyy HH:mm" }; //inbuilt dateTime library
+
+
+                    if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
+                    {
+                        if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
+                                                                                                                        //if (DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime) && double.TryParse(valueString, out value))//inbuilt dateTime library                                                                                              //if ((pattern1.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime) || pattern2.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime)) && double.TryParse(valueString, out value))
                         {
-                            // Replace '/' with '-'
-                            dateTimeString = dateTimeString.Replace('/', '-');
-                        }
-                        Console.WriteLine(dateTimeString);
+                            System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
+                            System.Windows.Media.Brush borderColor = value >= 0 ? System.Windows.Media.Brushes.DarkGreen : System.Windows.Media.Brushes.DarkRed;
 
-                        string valueString;
+                            // Add the date to the list of available dates
+                            selectedDates.Add(dateTime); //dateline
 
-                        if (rowData.Length < 4)
-                        {
-                            valueString = "0";
+                            double roundedValue = Math.Round(value, 2);
+
+                            series.Values.Add(new ObservablePoint(selectedDates.Count - 1, roundedValue));
+
+
+
+                            //series.Foreground = System.Windows.Media.Brushes.Red;
+
+                            //series.LabelPoint = chartPoint =>
+                            // DateTime.FromOADate(chartPoint.X).ToString("MMM dd HH:mm") + ", " + Math.Round(chartPoint.Y, 2);
+
+
+                            //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), roundedValue)); //original working
+
+                            //series.Values.Add(new ObservablePoint(dateTime.ToDateTimeUnspecified().ToOADate(), value));//nodaTime library
+                            //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), value));
+
+                            //-------------
+                            //for (int k = 0; k < selectedDates.Count; k++)//dateline
+                            //{
+                            //    series.Values.Add(new ObservablePoint(k, roundedValue));
+                            //}
+                            //series.Values.Add(new ObservablePoint(selectedDates.Count, roundedValue));
+
+                            //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
+                            //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToString();
+
+                            //seriesCollection.Add(series);
+
                         }
                         else
                         {
-                            valueString = rowData[valueIndex];
+                            Console.WriteLine($"Error parsing data at row {i}");
                         }
 
+                        Console.WriteLine(seriesCollection);
+                        // Set the series collection for the chart
+                        CartesianChart1.Series = seriesCollection;
+                    }
+                }
 
-                        DateTime dateTime;//original 
+                //for (int k = 0; k < selectedDates.Count; k++)//dateline
+                //{
+                //    series.Values.Add(new ObservablePoint(k, roundedValue));
+                //}
+                //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
+                seriesCollection.Add(series);
 
-
-                        string[] formats = { "M-dd-yyyy HH:mm" }; //inbuilt dateTime library
-
-
-                        if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
+                // Set labels
+                switch (cnt)
+                {
+                    case 0:
                         {
-                            if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
-                                                                                                                            //if (DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime) && double.TryParse(valueString, out value))//inbuilt dateTime library                                                                                              //if ((pattern1.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime) || pattern2.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime)) && double.TryParse(valueString, out value))
-                            {
-                                System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
-                                System.Windows.Media.Brush borderColor = value >= 0 ? System.Windows.Media.Brushes.DarkGreen : System.Windows.Media.Brushes.DarkRed;
-
-                                // Add the date to the list of available dates
-                                selectedDates.Add(dateTime); //dateline
-
-                                double roundedValue = Math.Round(value, 2);
-
-                                series.Values.Add(new ObservablePoint(selectedDates.Count - 1, roundedValue));
-
-
-
-                                //series.Foreground = System.Windows.Media.Brushes.Red;
-
-                                //series.LabelPoint = chartPoint =>
-                                // DateTime.FromOADate(chartPoint.X).ToString("MMM dd HH:mm") + ", " + Math.Round(chartPoint.Y, 2);
-
-
-                                //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), roundedValue)); //original working
-
-                                //series.Values.Add(new ObservablePoint(dateTime.ToDateTimeUnspecified().ToOADate(), value));//nodaTime library
-                                //series.Values.Add(new ObservablePoint(dateTime.ToOADate(), value));
-
-                                //-------------
-                                //for (int k = 0; k < selectedDates.Count; k++)//dateline
-                                //{
-                                //    series.Values.Add(new ObservablePoint(k, roundedValue));
-                                //}
-                                //series.Values.Add(new ObservablePoint(selectedDates.Count, roundedValue));
-
-                                //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
-                                //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToString();
-
-                                //seriesCollection.Add(series);
-
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Error parsing data at row {i}");
-                            }
-
-                            Console.WriteLine(seriesCollection);
-                            // Set the series collection for the chart
-                            CartesianChart1.Series = seriesCollection;
+                            Label1.Text = strFile;
+                            break;
                         }
-                    }
+                    case 1:
+                        {
+                            Label2.Text = strFile;
+                            break;
+                        }
+                    case 2:
+                        {
+                            Label3.Text = strFile;
+                            break;
+                        }
+                    case 3:
+                        {
+                            Label4.Text = strFile;
+                            break;
+                        }
+                    case 4:
+                        {
+                            Label5.Text = strFile;
+                            break;
+                        }
+                    case 5:
+                        {
+                            label7.Text = strFile;
+                            break;
+                        }
+                    case 6:
+                        {
+                            label8.Text = strFile;
+                            break;
+                        }
 
-                    //for (int k = 0; k < selectedDates.Count; k++)//dateline
-                    //{
-                    //    series.Values.Add(new ObservablePoint(k, roundedValue));
-                    //}
-                    //CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToShortDateString();
-                    seriesCollection.Add(series);
+                }
+                cnt = (short)(cnt + 1);
 
-                    // Set labels
-                    switch (cnt)
-                    {
-                        case 0:
-                            {
-                                Label1.Text = strFile;
-                                break;
-                            }
-                        case 1:
-                            {
-                                Label2.Text = strFile;
-                                break;
-                            }
-                        case 2:
-                            {
-                                Label3.Text = strFile;
-                                break;
-                            }
-                        case 3:
-                            {
-                                Label4.Text = strFile;
-                                break;
-                            }
-                        case 4:
-                            {
-                                Label5.Text = strFile;
-                                break;
-                            }
-                        case 5:
-                            {
-                                label7.Text = strFile;
-                                break;
-                            }
-                        case 6:
-                            {
-                                label8.Text = strFile;
-                                break;
-                            }
-
-                    }
-                    cnt = (short)(cnt + 1);
-                
 
             }
-            CartesianChart1.AxisX[0].LabelFormatter = value => selectedDates[(int)value].ToString();
+            CartesianChart1.AxisX[0].LabelFormatter = value =>
+            {
+                if (value >= 0 && value < selectedDates.Count)
+                {
+                    return selectedDates[(int)value].ToString("dd-MMM HH");
+                }
+                else
+                {
+                    return "00:00"; // User message
+                }
+            };
 
             Console.WriteLine(seriesCollection);
             // Set the series collection for the chart
@@ -1051,8 +1067,6 @@ namespace mcl
             //{
             //    Label6.Text = "";
             //}
-
-
         }
 
 
@@ -1141,7 +1155,7 @@ namespace mcl
                 //lblLocation.Text = "Channel  : " + listBH[bhIndex].ChNo;
                 lblLocation.Text = "Channel  : " + listBH[bhIndex].Id;
                 lblLocation.Text = "Unit  : " + listBH[bhIndex].Unit;
-                
+
             }
             else
             {
@@ -1161,7 +1175,7 @@ namespace mcl
                 tbViewGraph.Enabled = true;
                 tbDelete.Enabled = true;
                 tbReport.Enabled = bnOneFileSelected;
-                //tbBaseFile.Enabled = bnOneFileSelected;
+                tbBaseFile.Enabled = bnOneFileSelected;
             }
             else
             {
@@ -1301,7 +1315,8 @@ namespace mcl
                     DialogResult dialogResult = MessageBox.Show("Are you sure you want to remove the BaseFile?", "Confirm", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        argbh.BaseFile = null; // You can also use String.Empty if you prefer
+                        //argbh.BaseFile = null; // You can also use String.Empty if you prefer
+                        argbh.BaseFile = null;
                         MessageBox.Show("The BaseFile has been removed.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information); // Notify the user
                     }
                 }
@@ -1323,6 +1338,7 @@ namespace mcl
 
         private void ListBox1_DrawItem(object sender, DrawItemEventArgs e)
         {
+
             // Draw the background of the ListBox control for each item.
             e.DrawBackground();
             if (e.Index < 0)
@@ -1497,10 +1513,45 @@ namespace mcl
         }
 
         
-
+        
         private void tbMenuSlider_Click_1(object sender, EventArgs e)
         {
+            try
+            {
+                splitContainerTransition.Start();
+            }catch (Exception ex) { Console.Write(ex.Message); }
+        } 
 
+
+        bool splitContainerExpand = true;
+        private void splitContainerTransition_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (splitContainerExpand)
+                {
+                    SplitContainer1.SplitterDistance -= 130;
+
+                    if (SplitContainer1.SplitterDistance <= 92)
+                    {
+                        splitContainerExpand = false;
+                        splitContainerTransition.Stop();
+                    }
+                }
+                else
+                {
+                    SplitContainer1.SplitterDistance += 130;
+                    if (SplitContainer1.SplitterDistance >= 370)
+                    {
+                        splitContainerExpand = true;
+                        splitContainerTransition.Stop();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         }
     }
-}

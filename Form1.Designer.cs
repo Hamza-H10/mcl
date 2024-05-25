@@ -82,7 +82,7 @@ namespace mcl
             this.PrintDialog1 = new System.Windows.Forms.PrintDialog();
             this.sqLiteCommand1 = new System.Data.SQLite.SQLiteCommand();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.splitContainerTransition = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer1)).BeginInit();
             this.SplitContainer1.Panel1.SuspendLayout();
             this.SplitContainer1.Panel2.SuspendLayout();
@@ -114,7 +114,7 @@ namespace mcl
             this.SplitContainer1.Panel2.Controls.Add(this.SplitContainer2);
             this.SplitContainer1.Panel2.Controls.Add(this.ToolStrip2);
             this.SplitContainer1.Size = new System.Drawing.Size(1445, 601);
-            this.SplitContainer1.SplitterDistance = 408;
+            this.SplitContainer1.SplitterDistance = 371;
             this.SplitContainer1.SplitterWidth = 5;
             this.SplitContainer1.TabIndex = 0;
             // 
@@ -132,7 +132,7 @@ namespace mcl
             this.lstBoreholes.Margin = new System.Windows.Forms.Padding(4);
             this.lstBoreholes.Name = "lstBoreholes";
             this.lstBoreholes.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lstBoreholes.Size = new System.Drawing.Size(408, 541);
+            this.lstBoreholes.Size = new System.Drawing.Size(371, 541);
             this.lstBoreholes.TabIndex = 1;
             this.lstBoreholes.Click += new System.EventHandler(this.lstBoreholes_Click);
             this.lstBoreholes.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ListBox1_DrawItem);
@@ -155,7 +155,7 @@ namespace mcl
             this.tbBaseFile});
             this.ToolStrip1.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip1.Name = "ToolStrip1";
-            this.ToolStrip1.Size = new System.Drawing.Size(408, 60);
+            this.ToolStrip1.Size = new System.Drawing.Size(371, 60);
             this.ToolStrip1.Stretch = true;
             this.ToolStrip1.TabIndex = 0;
             this.ToolStrip1.Text = "ToolStrip1";
@@ -278,8 +278,8 @@ namespace mcl
             this.SplitContainer2.Panel2.Controls.Add(this.Label3);
             this.SplitContainer2.Panel2.Controls.Add(this.Label2);
             this.SplitContainer2.Panel2.Controls.Add(this.Label1);
-            this.SplitContainer2.Size = new System.Drawing.Size(1032, 541);
-            this.SplitContainer2.SplitterDistance = 428;
+            this.SplitContainer2.Size = new System.Drawing.Size(1069, 541);
+            this.SplitContainer2.SplitterDistance = 423;
             this.SplitContainer2.SplitterWidth = 5;
             this.SplitContainer2.TabIndex = 1;
             // 
@@ -308,7 +308,7 @@ namespace mcl
             this.DataGridView1.Name = "DataGridView1";
             this.DataGridView1.ReadOnly = true;
             this.DataGridView1.RowHeadersWidth = 51;
-            this.DataGridView1.Size = new System.Drawing.Size(1032, 428);
+            this.DataGridView1.Size = new System.Drawing.Size(1069, 423);
             this.DataGridView1.TabIndex = 3;
             this.DataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
             // 
@@ -318,7 +318,7 @@ namespace mcl
             this.CartesianChart1.Location = new System.Drawing.Point(0, 0);
             this.CartesianChart1.Margin = new System.Windows.Forms.Padding(4);
             this.CartesianChart1.Name = "CartesianChart1";
-            this.CartesianChart1.Size = new System.Drawing.Size(1032, 428);
+            this.CartesianChart1.Size = new System.Drawing.Size(1069, 423);
             this.CartesianChart1.TabIndex = 2;
             this.CartesianChart1.Text = "CartesianChart1";
             // 
@@ -480,7 +480,7 @@ namespace mcl
             this.toolStripSplitButton1});
             this.ToolStrip2.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip2.Name = "ToolStrip2";
-            this.ToolStrip2.Size = new System.Drawing.Size(1032, 60);
+            this.ToolStrip2.Size = new System.Drawing.Size(1069, 60);
             this.ToolStrip2.TabIndex = 0;
             this.ToolStrip2.Text = "ToolStrip2";
             // 
@@ -597,6 +597,11 @@ namespace mcl
             // 
             this.sqLiteCommand1.CommandText = null;
             // 
+            // splitContainerTransition
+            // 
+            this.splitContainerTransition.Interval = 10;
+            this.splitContainerTransition.Tick += new System.EventHandler(this.splitContainerTransition_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -675,6 +680,6 @@ namespace mcl
         private ToolStripMenuItem mMToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ToolStripButton tbMenuSlide;
-        private Timer timer1;
+        private Timer splitContainerTransition;
     }
 }

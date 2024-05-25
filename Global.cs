@@ -118,7 +118,7 @@ namespace mcl
 
             if (bnAddBaseFile)
             {
-              //          sqlite_cmd.CommandText = @" UPDATE Boreholes SET [SITENAME]=@SiteName, [LOCATION]=@Location,  [DEPTH]=@Depth, [BASEFILE]=@BaseFile 
+              //sqlite_cmd.CommandText = @" UPDATE Boreholes SET [SITENAME]=@SiteName, [LOCATION]=@Location,  [DEPTH]=@Depth, [BASEFILE]=@BaseFile 
               //WHERE [Id]=@ID";
                         sqlite_cmd.CommandText = @" UPDATE Boreholes SET [UNIT]=@Unit, [BASEFILE]=@BaseFile 
               WHERE [Id]=@ID";
@@ -165,7 +165,7 @@ namespace mcl
         {
             var bh = new List<BoreHole>();
             //sqlite_cmd.CommandText = "SELECT Id, SITENAME, LOCATION,  DEPTH, BASEFILE FROM Boreholes ORDER BY Id";
-            sqlite_cmd.CommandText = "SELECT Id, BASEFILE FROM Boreholes ORDER BY Id";
+            sqlite_cmd.CommandText = "SELECT Id, Unit, BASEFILE FROM Boreholes ORDER BY Id";
             //DateTime, sensor,
 
             sqlite_datareader = sqlite_cmd.ExecuteReader();
@@ -175,7 +175,10 @@ namespace mcl
 
             bh.Add(new BoreHole() {
                 //Id = Conversions.ToShort(sqlite_datareader.GetValue(0)), SiteName = Conversions.ToString(sqlite_datareader.GetValue(1)), Location = Conversions.ToString(sqlite_datareader.GetValue(2)), Depth = Conversions.ToSingle(sqlite_datareader.GetValue(3)), BaseFile = Conversions.ToString(Operators.ConcatenateObject("", sqlite_datareader.GetValue(4))) });
-                Id = Conversions.ToShort(sqlite_datareader.GetValue(0)), Unit = Conversions.ToString(sqlite_datareader.GetValue(1)), BaseFile = Conversions.ToString(Operators.ConcatenateObject("", sqlite_datareader.GetValue(1)))});
+                Id = sqlite_datareader.IsDBNull(0) ? (short)0 : Conversions.ToShort(sqlite_datareader.GetValue(0)),
+                Unit = sqlite_datareader.IsDBNull(1) ? string.Empty : Conversions.ToString(sqlite_datareader.GetValue(1)),
+                BaseFile = sqlite_datareader.IsDBNull(2) ? string.Empty : Conversions.ToString(Operators.ConcatenateObject("", sqlite_datareader.GetValue(2)))
+            });
             //DateTime = Conversions.ToString(sqlite_datareader.GetValue(3)), sensor = Conversions.ToInteger(sqlite_datareader.GetValue(4)), 
             sqlite_datareader.Close();
             return bh;
