@@ -37,8 +37,8 @@ namespace mcl
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lstBoreholes = new System.Windows.Forms.ListBox();
             this.ToolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -222,8 +222,8 @@ namespace mcl
             this.tbImport.Image = ((System.Drawing.Image)(resources.GetObject("tbImport.Image")));
             this.tbImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbImport.Name = "tbImport";
-            this.tbImport.Size = new System.Drawing.Size(93, 57);
-            this.tbImport.Text = "Import CSV";
+            this.tbImport.Size = new System.Drawing.Size(62, 57);
+            this.tbImport.Text = "Import";
             this.tbImport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbImport.Click += new System.EventHandler(this.tbImport_Click);
             // 
@@ -244,8 +244,8 @@ namespace mcl
             this.tbBaseFile.Image = ((System.Drawing.Image)(resources.GetObject("tbBaseFile.Image")));
             this.tbBaseFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbBaseFile.Name = "tbBaseFile";
-            this.tbBaseFile.Size = new System.Drawing.Size(74, 57);
-            this.tbBaseFile.Text = "Base File";
+            this.tbBaseFile.Size = new System.Drawing.Size(46, 57);
+            this.tbBaseFile.Text = "Base";
             this.tbBaseFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbBaseFile.Click += new System.EventHandler(this.tbBaseFile_Click);
             // 
@@ -279,7 +279,7 @@ namespace mcl
             this.SplitContainer2.Panel2.Controls.Add(this.Label2);
             this.SplitContainer2.Panel2.Controls.Add(this.Label1);
             this.SplitContainer2.Size = new System.Drawing.Size(1069, 541);
-            this.SplitContainer2.SplitterDistance = 423;
+            this.SplitContainer2.SplitterDistance = 421;
             this.SplitContainer2.SplitterWidth = 5;
             this.SplitContainer2.TabIndex = 1;
             // 
@@ -287,20 +287,20 @@ namespace mcl
             // 
             this.DataGridView1.AllowUserToAddRows = false;
             this.DataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.DataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            dataGridViewCellStyle2.Format = "N2";
-            dataGridViewCellStyle2.NullValue = null;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            dataGridViewCellStyle4.Format = "N2";
+            dataGridViewCellStyle4.NullValue = null;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
             this.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataGridView1.GridColor = System.Drawing.SystemColors.ControlLightLight;
             this.DataGridView1.Location = new System.Drawing.Point(0, 0);
@@ -308,7 +308,7 @@ namespace mcl
             this.DataGridView1.Name = "DataGridView1";
             this.DataGridView1.ReadOnly = true;
             this.DataGridView1.RowHeadersWidth = 51;
-            this.DataGridView1.Size = new System.Drawing.Size(1069, 423);
+            this.DataGridView1.Size = new System.Drawing.Size(1069, 421);
             this.DataGridView1.TabIndex = 3;
             this.DataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
             // 
@@ -318,7 +318,7 @@ namespace mcl
             this.CartesianChart1.Location = new System.Drawing.Point(0, 0);
             this.CartesianChart1.Margin = new System.Windows.Forms.Padding(4);
             this.CartesianChart1.Name = "CartesianChart1";
-            this.CartesianChart1.Size = new System.Drawing.Size(1069, 423);
+            this.CartesianChart1.Size = new System.Drawing.Size(1069, 421);
             this.CartesianChart1.TabIndex = 2;
             this.CartesianChart1.Text = "CartesianChart1";
             // 
@@ -488,7 +488,7 @@ namespace mcl
             // 
             this.PrintToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.PrintToolStripButton.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PrintToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("PrintToolStripButton.Image")));
+            this.PrintToolStripButton.Image = global::InclinoView.My.Resources.Resources.icons8_print_48;
             this.PrintToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.PrintToolStripButton.Name = "PrintToolStripButton";
             this.PrintToolStripButton.Size = new System.Drawing.Size(48, 57);

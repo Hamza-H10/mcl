@@ -122,9 +122,6 @@ namespace mcl
             toolStripSplitButton1.BackColor = is_MM ? Color.Cyan : Color.LightGreen; // or set to initial color
 
             // Reset other properties and states as needed...
-
-
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -846,13 +843,15 @@ namespace mcl
             ResetLabels();
 
             CartesianChart1.BackColor = System.Drawing.Color.White;
-            CartesianChart1.Zoom = ZoomingOptions.Xy;
-            //CartesianChart1.Zoom = ZoomingOptions.Y;
+            //CartesianChart1.Zoom = ZoomingOptions.Xy;
+            CartesianChart1.Zoom = ZoomingOptions.X;
             CartesianChart1.Series.Clear();
             CartesianChart1.AxisX.Clear();
             CartesianChart1.AxisY.Clear();
             CartesianChart1.AxisY.Add(YAxis);
             CartesianChart1.AxisX.Add(XAxis);
+
+            XAxis.LabelsRotation = 45;
 
             if (DataGridView1.Visible)
                 DataGridView1.Visible = false;
@@ -893,15 +892,15 @@ namespace mcl
 
                 //var series = new ColumnSeries();
                 double value = 0;//original
-                                 //double roundedValue = Math.Round(value, 2);
+                //double roundedValue = Math.Round(value, 2);
 
 
                 var series = new ColumnSeries
                 {
                     Title = "value",
                     Values = new ChartValues<ObservablePoint>(),
-                    Fill = System.Windows.Media.Brushes.LightGreen,
-                    Stroke = System.Windows.Media.Brushes.DarkGreen,
+                    //Fill = System.Windows.Media.Brushes.LightGreen,
+                    //Stroke = System.Windows.Media.Brushes.DarkGreen,
                     PointGeometry = DefaultGeometries.Square,
                     StrokeThickness = 1.0
                 };
@@ -943,10 +942,10 @@ namespace mcl
                     if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
                     {
                         if (DateTime.TryParse(dateTimeString, out dateTime) && double.TryParse(valueString, out value)) //original working
-                                                                                                                        //if (DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime) && double.TryParse(valueString, out value))//inbuilt dateTime library                                                                                              //if ((pattern1.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime) || pattern2.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime)) && double.TryParse(valueString, out value))
+                        //if (DateTime.TryParseExact(dateTimeString, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime) && double.TryParse(valueString, out value))//inbuilt dateTime library                                                                                              //if ((pattern1.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime) || pattern2.Parse(dateTimeString).TryGetValue(LocalDateTime.FromDateTime(DateTime.MinValue), out dateTime)) && double.TryParse(valueString, out value))
                         {
-                            System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
-                            System.Windows.Media.Brush borderColor = value >= 0 ? System.Windows.Media.Brushes.DarkGreen : System.Windows.Media.Brushes.DarkRed;
+                            //System.Windows.Media.Brush color = value >= 0 ? System.Windows.Media.Brushes.LightGreen : System.Windows.Media.Brushes.Pink;
+                            //System.Windows.Media.Brush borderColor = value >= 0 ? System.Windows.Media.Brushes.DarkGreen : System.Windows.Media.Brushes.DarkRed;
 
                             // Add the date to the list of available dates
                             selectedDates.Add(dateTime); //dateline
@@ -1170,6 +1169,7 @@ namespace mcl
         {
             bool bnOneFileSelected = lstBoreholes.SelectedItems.Count == 1;
             tbBack.Enabled = enb;
+            
             if (enb & lstBoreholes.SelectedItems.Count > 0)
             {
                 tbViewGraph.Enabled = true;
@@ -1189,6 +1189,7 @@ namespace mcl
         private void lstBoreholes_Click(object sender, EventArgs e)
         {
             bool argenb = !(boreHoleSelected == 0);
+            
             ToolBarEnable(ref argenb);
         }
 
@@ -1229,11 +1230,11 @@ namespace mcl
                 return;
             PrintDocument1.PrinterSettings = PrintDialog1.PrinterSettings;
 
-            bsTextPrintData = "Borehole  : " + boreHoleSelected.ToString().PadLeft(2, '0') + Constants.vbCrLf;
+            bsTextPrintData = "Channel  : " + boreHoleSelected.ToString().PadLeft(2, '0') + Constants.vbCrLf;
             //bsTextPrintData += "Depth     : " + listBH[bhIndex].Depth + "m" + Constants.vbCrLf;
             //bsTextPrintData += "Site      : " + listBH[bhIndex].SiteName + Constants.vbCrLf;
             //bsTextPrintData += "Location  : " + listBH[bhIndex].Location + Constants.vbCrLf;
-            bsTextPrintData += "Channel  : " + listBH[bhIndex].ChNo + Constants.vbCrLf;
+            bsTextPrintData += " : " + listBH[bhIndex].ChNo + Constants.vbCrLf;
             bsTextPrintData += "Unit  : " + listBH[bhIndex].Unit + Constants.vbCrLf;
             bsTextPrintData += "Date/Time : " + Label1.Text;
             if (CartesianChart1.Visible)
@@ -1373,6 +1374,8 @@ namespace mcl
 
         private void PrintForm1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
+            //float scaleFactor = 0.8f;
+
             var strFormat = new StringFormat();
             var rectDraw = new RectangleF(e.MarginBounds.Left, e.MarginBounds.Top, e.MarginBounds.Width, e.MarginBounds.Height);
 
@@ -1474,7 +1477,6 @@ namespace mcl
                 //MessageBox.Show($"Showing graph in mm", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Handle the 'mm' state
                 DisplayGraph_Channel();
-
             }
         }
         private void ResetToolStripSplitButton1()
@@ -1530,7 +1532,8 @@ namespace mcl
             {
                 if (splitContainerExpand)
                 {
-                    SplitContainer1.SplitterDistance -= 130;
+                    //SplitContainer1.SplitterDistance -= 130;
+                    SplitContainer1.SplitterDistance = 89;
 
                     if (SplitContainer1.SplitterDistance <= 92)
                     {
@@ -1540,7 +1543,8 @@ namespace mcl
                 }
                 else
                 {
-                    SplitContainer1.SplitterDistance += 130;
+                    //SplitContainer1.SplitterDistance += 370;            
+                    SplitContainer1.SplitterDistance = 370;
                     if (SplitContainer1.SplitterDistance >= 370)
                     {
                         splitContainerExpand = true;
