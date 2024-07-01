@@ -14,19 +14,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-//using LiveChartsCore;
-//using LiveChartsCore.SkiaSharpView;
 
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using System.Reflection;
-using System.Linq.Expressions;
-using System.Diagnostics.Eventing.Reader;
 using Newtonsoft.Json.Linq;
-using System.Windows.Documents;
-using LiveChartsCore;
-//using System.Windows.Controls;
-
-
 
 
 
@@ -58,13 +48,14 @@ namespace mcl
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;//for scalability issues in different DPI, windows 10,11 
+            
         }
 
 
 
         private void ReloadList()
         {
-
+            
             Console.WriteLine("Inside ReloadList function");
             // Clear the list of boreholes
             lstBoreholes.Items.Clear();
@@ -126,6 +117,7 @@ namespace mcl
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             // Set label colors
             Label1.ForeColor = System.Drawing.Color.FromArgb(33, 149, 242);
             Label2.ForeColor = System.Drawing.Color.FromArgb(243, 67, 54);
@@ -1180,7 +1172,9 @@ namespace mcl
             else
             {
                 tbViewGraph.Enabled = false;
-                tbDelete.Enabled = false;
+
+                //tbDelete.Enabled = false;
+
                 tbBaseFile.Enabled = false;
                 tbReport.Enabled = false;
             }
@@ -1213,13 +1207,46 @@ namespace mcl
 
         private void tbDelete_Click(object sender, EventArgs e)
         {
-            if (lstBoreholes.SelectedItems.Count == 0)
+
+            if (lstBoreholes.SelectedIndex < 0)
                 return;
+
+            if (boreHoleSelected == 0)
+            {
+                bhIndex = (short)lstBoreholes.SelectedIndex;
+                boreHoleSelected = listBH[bhIndex].Id;
+
+                // Confirm with the user before deleting
+                var confirmResult = MessageBox.Show("Are you sure to delete this Channel? Inside files will be deleted!",
+                                                     "Confirm Delete!",
+                                                     MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    string dirPath = GlobalCode.GetBoreholeDirectory(ref boreHoleSelected);
+
+                    if (Directory.Exists(dirPath))
+                    {
+                        Directory.Delete(dirPath, true);
+                    }
+
+                    GlobalCode.DeleteBorehole(ref boreHoleSelected);
+                    boreHoleSelected = 0;
+                    bhIndex = -1;
+                    ReloadList();
+                }
+                else
+                {
+                    boreHoleSelected = 0;
+                    bhIndex = -1;
+                    ReloadList();
+                }
+                return;
+            }
 
             if (Interaction.MsgBox("Are you sure you want to delete " + lstBoreholes.SelectedItems.Count + " selected file(s)?", Constants.vbYesNo | Constants.vbQuestion, "Delete") == Constants.vbYes)
             {
                 foreach (string strFile in lstBoreholes.SelectedItems)
-                    System.IO.File.Delete(GlobalCode.GetBoreholeDirectory(ref boreHoleSelected) + @"\" + strFile);
+                    File.Delete(GlobalCode.GetBoreholeDirectory(ref boreHoleSelected) + @"\" + strFile);
                 ReloadList();
             }
         }
@@ -1432,13 +1459,13 @@ namespace mcl
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
             // Toggle the state
-            is_MM = !is_MM;
+            //is_MM = !is_MM;
 
             // Properties - Update the button text,color based on the current state
-            toolStripSplitButton1.Text = is_MM ? "MM" : "DEG";
-            toolStripSplitButton1.BackgroundImage = new Bitmap(1, 1);
-            toolStripSplitButton1.BackgroundImageLayout = ImageLayout.None;
-            toolStripSplitButton1.BackColor = is_MM ? Color.Cyan : Color.LightGreen;//previously LightBlue instead of Cyan
+            //toolStripSplitButton1.Text = is_MM ? "MM" : "DEG";
+            //toolStripSplitButton1.BackgroundImage = new Bitmap(1, 1);
+            //toolStripSplitButton1.BackgroundImageLayout = ImageLayout.None;
+            //toolStripSplitButton1.BackColor = is_MM ? Color.Cyan : Color.LightGreen;//previously LightBlue instead of Cyan
 
             // Check if a base file is selected
             if (listBH[bhIndex].BaseFile is null || string.IsNullOrEmpty(listBH[bhIndex].BaseFile))
@@ -1453,11 +1480,12 @@ namespace mcl
             {
                 // Reset labels and hide chart and DataGridView
                 ResetLabels();
-                CartesianChart1.Visible = false;
-                DataGridView1.Visible = false;
+                //CartesianChart1.Visible = false;
+                //DataGridView1.Visible = false;
+
                 //ToolStrip2.Enabled = false;
                 // Get the path to the base file
-                string strFileBase = GlobalCode.GetBoreholeDirectory(ref boreHoleSelected) + @"\" + listBH[bhIndex].BaseFile;
+                //string strFileBase = GlobalCode.GetBoreholeDirectory(ref boreHoleSelected) + @"\" + listBH[bhIndex].BaseFile;
 
                 //if (!System.IO.File.Exists(strFileBase))//if making the BaseFile concrete function then uncomment this.
                 //{
@@ -1476,7 +1504,8 @@ namespace mcl
             {
                 //MessageBox.Show($"Showing graph in mm", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Handle the 'mm' state
-                DisplayGraph_Channel();
+
+                //DisplayGraph_Channel();
             }
         }
         private void ResetToolStripSplitButton1()
@@ -1533,7 +1562,7 @@ namespace mcl
                 if (splitContainerExpand)
                 {
                     //SplitContainer1.SplitterDistance -= 130;
-                    SplitContainer1.SplitterDistance = 89;
+                    SplitContainer1.SplitterDistance = 79;
 
                     if (SplitContainer1.SplitterDistance <= 92)
                     {

@@ -37,8 +37,8 @@ namespace mcl
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lstBoreholes = new System.Windows.Forms.ListBox();
             this.ToolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -167,7 +167,7 @@ namespace mcl
             this.tbMenuSlide.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tbMenuSlide.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbMenuSlide.Name = "tbMenuSlide";
-            this.tbMenuSlide.Size = new System.Drawing.Size(54, 57);
+            this.tbMenuSlide.Size = new System.Drawing.Size(52, 57);
             this.tbMenuSlide.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbMenuSlide.ToolTipText = "Slider\r\n";
             this.tbMenuSlide.Click += new System.EventHandler(this.tbMenuSlider_Click_1);
@@ -279,7 +279,7 @@ namespace mcl
             this.SplitContainer2.Panel2.Controls.Add(this.Label2);
             this.SplitContainer2.Panel2.Controls.Add(this.Label1);
             this.SplitContainer2.Size = new System.Drawing.Size(1069, 541);
-            this.SplitContainer2.SplitterDistance = 421;
+            this.SplitContainer2.SplitterDistance = 420;
             this.SplitContainer2.SplitterWidth = 5;
             this.SplitContainer2.TabIndex = 1;
             // 
@@ -287,20 +287,20 @@ namespace mcl
             // 
             this.DataGridView1.AllowUserToAddRows = false;
             this.DataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.DataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.DataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            dataGridViewCellStyle2.Format = "N2";
+            dataGridViewCellStyle2.NullValue = null;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             this.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataGridView1.GridColor = System.Drawing.SystemColors.ControlLightLight;
             this.DataGridView1.Location = new System.Drawing.Point(0, 0);
@@ -308,7 +308,7 @@ namespace mcl
             this.DataGridView1.Name = "DataGridView1";
             this.DataGridView1.ReadOnly = true;
             this.DataGridView1.RowHeadersWidth = 51;
-            this.DataGridView1.Size = new System.Drawing.Size(1069, 421);
+            this.DataGridView1.Size = new System.Drawing.Size(1069, 420);
             this.DataGridView1.TabIndex = 3;
             this.DataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
             // 
@@ -318,7 +318,7 @@ namespace mcl
             this.CartesianChart1.Location = new System.Drawing.Point(0, 0);
             this.CartesianChart1.Margin = new System.Windows.Forms.Padding(4);
             this.CartesianChart1.Name = "CartesianChart1";
-            this.CartesianChart1.Size = new System.Drawing.Size(1069, 421);
+            this.CartesianChart1.Size = new System.Drawing.Size(1069, 420);
             this.CartesianChart1.TabIndex = 2;
             this.CartesianChart1.Text = "CartesianChart1";
             // 
@@ -519,23 +519,27 @@ namespace mcl
             this.tbAxisX.Checked = true;
             this.tbAxisX.CheckOnClick = true;
             this.tbAxisX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tbAxisX.Enabled = false;
             this.tbAxisX.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbAxisX.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbAxisX.Name = "tbAxisX";
             this.tbAxisX.Size = new System.Drawing.Size(39, 57);
             this.tbAxisX.Text = "+ve";
             this.tbAxisX.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbAxisX.Visible = false;
             this.tbAxisX.Click += new System.EventHandler(this.tbAxisX_Click);
             // 
             // tbAxisY
             // 
             this.tbAxisY.CheckOnClick = true;
+            this.tbAxisY.Enabled = false;
             this.tbAxisY.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbAxisY.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbAxisY.Name = "tbAxisY";
             this.tbAxisY.Size = new System.Drawing.Size(36, 57);
             this.tbAxisY.Text = "-ve";
             this.tbAxisY.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbAxisY.Visible = false;
             this.tbAxisY.Click += new System.EventHandler(this.tbAxisY_Click);
             // 
             // ToolStripSeparator3
@@ -548,23 +552,25 @@ namespace mcl
             this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.degToolStripMenuItem,
             this.mMToolStripMenuItem});
+            this.toolStripSplitButton1.Enabled = false;
             this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
             this.toolStripSplitButton1.Size = new System.Drawing.Size(59, 57);
             this.toolStripSplitButton1.Text = "Type";
+            this.toolStripSplitButton1.Visible = false;
             this.toolStripSplitButton1.ButtonClick += new System.EventHandler(this.toolStripSplitButton1_ButtonClick);
             // 
             // degToolStripMenuItem
             // 
             this.degToolStripMenuItem.Name = "degToolStripMenuItem";
-            this.degToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
+            this.degToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.degToolStripMenuItem.Text = "type1";
             this.degToolStripMenuItem.Click += new System.EventHandler(this.degToolStripMenuItem_Click);
             // 
             // mMToolStripMenuItem
             // 
             this.mMToolStripMenuItem.Name = "mMToolStripMenuItem";
-            this.mMToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
+            this.mMToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.mMToolStripMenuItem.Text = "type2";
             this.mMToolStripMenuItem.Click += new System.EventHandler(this.mMToolStripMenuItem_Click);
             // 
